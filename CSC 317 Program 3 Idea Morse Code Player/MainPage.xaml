@@ -1,51 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<!--
+
+Program Author: Aayush Gautam
+
+Assignment: Morse Code Transmitter
+
+Description: Front end for the transmitter
+
+-->
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="CSC_317_Program_3_Idea_Morse_Code_Player.MainPage"
-             Title="Morse Code Simulator"
-             >
+             Title="Morse Code Simulator">
 
-    <VerticalStackLayout
-            VerticalOptions="FillAndExpand"
-        >
+    <VerticalStackLayout VerticalOptions="FillAndExpand">
         <VerticalStackLayout>
-            <!--
-                I am using the MediaElement Community Toolkit extension to support
-                support playing sounds in my MAUI app.  These controls link to the
-                sound files in Resources->Raw 
-            -->
-            <toolkit:MediaElement x:Name="dash" IsVisible="false"
-                Source="embed://dah.wav" />
-
-            <toolkit:MediaElement x:Name="dot" IsVisible="false"
-                Source="embed://dit.wav" />
-            
+            <!-- Sound Players -->
+            <toolkit:MediaElement x:Name="dash" IsVisible="false" Source="embed://dah.wav" />
+            <toolkit:MediaElement x:Name="dot" IsVisible="false" Source="embed://dit.wav" />
         </VerticalStackLayout>
 
-        <VerticalStackLayout
-            Padding="30"
-            Spacing="10"
-            MaximumWidthRequest="500"
-            BackgroundColor="#EEEEFF"
-            VerticalOptions="FillAndExpand"
-            HeightRequest="1000"
-            >
-            <!-- ********************************************************************************
-                 *
-                 *  Note that you will need to add the rest of the GUI controls to complete the front-end. 
-                 *
-                 ********************************************************************************
-            -->
-            <Button
-                Clicked="SimulateMorse"
-                Text="Simulate"
-                x:Name="btnSimulate"
-                MaximumWidthRequest="200"
-                FontSize="25"
-                />
+        <VerticalStackLayout Padding="30" Spacing="10" MaximumWidthRequest="500"
+                             BackgroundColor="#EEEEFF" VerticalOptions="FillAndExpand" HeightRequest="1000">
             
+            <!-- Paragraph Instructions -->
+            <Label Text="The program translates your text into morse code, enter your text below and hear/see what your morse code looks like" HorizontalTextAlignment="Center"
+                   FontSize="18" FontAttributes="Bold" Margin="0,0,0,40" TextColor="Black"/>
+
+            <!-- User Input -->
+            <Entry x:Name="entryMessage" Placeholder="Enter your message here..." MaxLength="250"
+                   BackgroundColor="White" TextColor="Black" FontSize="15" />
+
+            <!-- Morse Code Display -->
+            <Label x:Name="labelMorseCode" Text="" FontSize="18" BackgroundColor="#DDDDDD" Padding="5,10,50,10"
+                   Margin="0,10,0,10" HeightRequest="200" TextColor="Black"/>
             
+            <!-- Simulate Button -->
+            <Button Clicked="SimulateMorse" Text="Simulate" x:Name="btnSimulate"
+                    MaximumWidthRequest="200" FontSize="25" />
+
         </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

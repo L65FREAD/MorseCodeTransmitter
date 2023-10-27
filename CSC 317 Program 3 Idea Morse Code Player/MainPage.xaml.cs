@@ -1,63 +1,83 @@
-﻿using CommunityToolkit.Maui.Views;
-using System.Threading;
+﻿/*
+
+Program Author: Aayush Gautam
+
+Assignment: Morse Code Transmitter
+
+Description:
+
+Controller between the frontend and the backend for the transmitter
+
+*/
+
+using CommunityToolkit.Maui.Views;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+using CommunityToolkit.Maui.Core.Primitives;
 
 namespace CSC_317_Program_3_Idea_Morse_Code_Player;
 
 public partial class MainPage : ContentPage
 {
-	/* This creates a class object of MorseEncoder, which
-	 * is a class that accepts a message and converts it to 
-	 * Morse Code. */
-	MorseEncoder morseEncoder;
-	public MainPage()
-	{
-		InitializeComponent();
-		morseEncoder = new MorseEncoder();
-	}
+    MorseEncoder morseEncoder;
 
-	/* This is the event function for the "Simulate" button.  
-	 * You will need to set the button's Click event to this
-	 * function. */
-	private async void SimulateMorse(object sender, EventArgs e)
-	{
-		/*This is an example of playing a sound.
-		 * Note that "dash" and "dot" are the Media Elements
-		 * created in the front-end XAML code. 
-		 * Modify this function so it translates the message
-		 * correctly. */
+    public MainPage()
+    {
+        InitializeComponent();
+        morseEncoder = new MorseEncoder();
+    }
 
-		//Disable the button while the sounds are playing.
-		btnSimulate.IsEnabled = false;
+    private async void SimulateMorse(object sender, EventArgs e)
+    {
+        btnSimulate.IsEnabled = false;
 
-		for(int i = 0; i < 10; i++)
-		{
-			//Plays a Dash
-			await PlaySound(dash);
+        string userMessage = entryMessage.Text;
+        if (string.IsNullOrEmpty(userMessage))
+        {
+            await DisplayAlert("Error", "Please enter a message to simulate.", "OK");
+            btnSimulate.IsEnabled = true;
+            return;
+        }
 
-			//Plays a Dot
-			await PlaySound(dot); 
+        morseEncoder.Text = userMessage;
+        string morseCode = morseEncoder.Morse;
 
-			//This function can be used to add a delay between the next dot/dash.
-			await Task.Delay(1000); //Delays for 1 second (measured in milliseconds).
-		}
+        labelMorseCode.Text = "";
+        foreach (char code in morseCode)
+        {
+            labelMorseCode.Text += code.ToString() + " ";
 
-		//Once the sounds are finished, enable the button to allow running again.
-		btnSimulate.IsEnabled = true;
+            if (code == '.')
+            {
+                // Play Dot sound
+                await PlaySound(dot);
+            }
+            else if (code == '-')
+            {
+                // Play Dash sound
+                await PlaySound(dash);
+            }
+            else if (code == '/')
+            {
+                // Wait for 1 second for space
+                await Task.Delay(1000);
+            }
+        }
 
-		
-	   
-	}
+        labelMorseCode.Text = "";
+        btnSimulate.IsEnabled = true;
+    }
 
-	/* This function should be called in the Click event function
-	 * above.  DO NOT MODIFY!!! */
-	private async Task PlaySound(MediaElement sound)
-	{
-		TimeSpan duration = sound.Duration;
-		sound.Play();
-		await Task.Delay(duration.Milliseconds + 200);
+    private async Task PlaySound(MediaElement sound)
+    {
+        while (sound.CurrentState == MediaElementState.Playing)
+        {
+            await Task.Delay(100);
+        }
 
-		return;
-	}
+        sound.Play();
+        await Task.Delay(sound.Duration + TimeSpan.FromMilliseconds(500));
 
+        sound.Stop();
+    }
 }
-

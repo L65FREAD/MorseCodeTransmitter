@@ -1,35 +1,76 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿/*
+
+Program Author: Aayush Gautam
+
+Assignment: Morse Code Transmitter
+
+Description:
+
+Encodes the morse code passed from the frontend
+
+*/
+using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace CSC_317_Program_3_Idea_Morse_Code_Player
 {
     internal class MorseEncoder
     {
-        /* This class should accept a message and convert it to Morse Code.
-         * complete the class below.
-         */
-        public MorseEncoder() 
-        {
-            /*Demonstrates how a single character can be translated to Morse Code
-             * using the Dictionary (which is a Hash Table) below.
-             * Note that this is NOT what should go into the constructor and is
-             * just a demonstration.
-             */
-            char e = 'a';
+        private string message;
+        private string morse_code;
 
-            //Match the associated value with the "e" as the dictionary key.
-            string morse_code = translation[e];
+        public MorseEncoder()
+        {
+            message = "";
+            morse_code = "";
         }
 
+        public MorseEncoder(string message) : this()
+        {
+            Text = message;
+        }
 
+        public string Text
+        {
+            get { return message; }
+            set
+            {
+                message = value.ToLower();
+                Translate();
+            }
+        }
 
-        /* This is a dictionary that is used to store the translation table  
-         * for converting your message to Morse Code
-         */
+        public string Morse
+        {
+            get { return morse_code; }
+        }
+
+        private void Translate()
+        {
+            StringBuilder morseBuilder = new StringBuilder();
+            foreach (char c in message)
+            {
+                if (translation.ContainsKey(c))
+                {
+                    morseBuilder.Append(translation[c] + " ");
+                }
+                else if (c == ' ')
+                {
+                    morseBuilder.Append(translation[c] + " ");
+                }
+                else
+                {
+                    morseBuilder.Append("? ");
+                }
+            }
+            morse_code = morseBuilder.ToString().Trim();
+        }
+
         private static Dictionary<char, string> translation = new Dictionary<char, string>()
         {
             { 'a', ".-" },
@@ -68,7 +109,7 @@ namespace CSC_317_Program_3_Idea_Morse_Code_Player
             { '7', "--..." },
             { '8', "---.." },
             { '9', "----." },
-            { ' ', "\\" },
+            { ' ', "/" },
         };
     }
 }
